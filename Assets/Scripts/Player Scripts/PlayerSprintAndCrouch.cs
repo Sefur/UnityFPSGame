@@ -65,6 +65,9 @@ public class PlayerSprintAndCrouch : MonoBehaviour
 
         if(Input.GetKeyUp(KeyCode.LeftControl) && !is_Crouching) {
             playerMovement.speed = move_Speed;
+            player_Footsteps.volume_Min = walk_Volume_Min;
+            player_Footsteps.volume_Max = walk_Volume_Max;
+            player_Footsteps.step_Distance = walk_Step_Distance;
         }
     }
 
