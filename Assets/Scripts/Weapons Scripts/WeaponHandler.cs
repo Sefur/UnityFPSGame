@@ -73,7 +73,9 @@ public class WeaponHandler : MonoBehaviour
     }
 
     void Turn_Off_AttackPoint() {
-        attack_Point.SetActive(false);
+        if(attack_Point.activeInHierarchy) {
+            attack_Point.SetActive(false);
+        }
     }
 
 
