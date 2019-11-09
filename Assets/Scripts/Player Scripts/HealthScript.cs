@@ -9,12 +9,15 @@ public class HealthScript : MonoBehaviour
     private EnemyAnimator enemy_Anim;
     private NavMeshAgent navAgent;
     private EnemyController enemy_Controller;
+    private PlayerStats player_Stats;
 
     public float health =100f;
 
     private bool is_Dead;
 
     public bool is_Player, is_Boar, is_Cannibal;
+
+    private EnemyAudio enemyAudio;
 
 
 
@@ -25,9 +28,11 @@ public class HealthScript : MonoBehaviour
             navAgent = GetComponent<NavMeshAgent>();
 
             //get enemy audio
+            enemyAudio = GetComponentInChildren<EnemyAudio>();
         } 
 
         if(is_Player){
+            player_Stats = GetComponentInChildren<PlayerStats>();
 
         }
     }
@@ -40,6 +45,7 @@ public class HealthScript : MonoBehaviour
 
         if(is_Player){
             // show the stats(display the health UI value)
+            player_Stats.Display_HealthStats(health);
             
         }
         if(is_Boar || is_Cannibal){
@@ -66,8 +72,10 @@ public class HealthScript : MonoBehaviour
             enemy_Anim.enabled = false;
 
             // StartCoroutine
+            StartCoroutine(DeadSound());
 
             // EnemyManager spawn more enemies
+            EnemyManager.instance.EnemyDied(true);
         }
 
         if(is_Boar){
@@ -76,9 +84,12 @@ public class HealthScript : MonoBehaviour
             navAgent.isStopped = true;
 
             enemy_Anim.Dead();
-                        // StartCoroutine
+
+            // StartCoroutine
+            StartCoroutine(DeadSound());
 
             // EnemyManager spawn more enemies
+            EnemyManager.instance.EnemyDied(false);
 
         }
 
@@ -90,11 +101,12 @@ public class HealthScript : MonoBehaviour
             }
 
             //call enemy manager to stop spawning enemis
+            EnemyManager.instance.StopSpawning();
 
             GetComponent<PlayerMovement>().enabled = false;
             GetComponent<PlayerAttack>().enabled = false;
             GetComponent<WeaponManager>().GetCurrentSelectedWeapon().
-                gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         if(tag == Tags.PLAYER_TAG) {
@@ -106,13 +118,18 @@ public class HealthScript : MonoBehaviour
         }
     }//player died
 
-    void RestartCame(){
+    void RestartGame(){
          UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
 
     }
 
     void TurnOffGameObject(){
         gameObject.SetActive(false);
+    }
+
+    IEnumerator DeadSound(){
+        yield return new WaitForSeconds(0.3f);
+        enemyAudio.Play_DeadSound();
     }
 
 }

@@ -180,6 +180,7 @@ public class PlayerAttack : MonoBehaviour
 
         if(Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit)){
             if(hit.transform.tag == Tags.ENEMY_TAG){
+                print("shoot"+ hit.transform.tag);
                 hit.transform.GetComponent<HealthScript>().ApplyDamage(damage);
             }
         }
