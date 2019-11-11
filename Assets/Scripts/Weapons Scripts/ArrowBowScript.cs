@@ -44,8 +44,10 @@ public class ArrowBowScript : MonoBehaviour
     void OnTriggerEnter(Collider target)
     {
         // after we touch an enemy deactivate game object
-        target.GetComponent<HealthScript>().ApplyDamage(damage);
-        gameObject.SetActive(false);
+        if(target.tag == Tags.ENEMY_TAG){
+
+            target.GetComponent<HealthScript>().ApplyDamage(damage);
+        }
 
     }
 }
